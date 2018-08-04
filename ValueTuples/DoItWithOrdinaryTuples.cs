@@ -20,7 +20,15 @@ namespace ValueTuples
             //Tuple<int, string> myTuple = new Tuple<int, string>();
         }
 
-        public static void TuplesCreation_NoMemberAssignment() {
+        public static void TuplesWithManyMembers() {
+            var eightMemberTuple = Tuple.Create(1, 2, 3, 4, 5, 6, 7, 8);
+
+            // There is nu old-school tuple with nine members
+            //var nineMemberTupleAttempt1 = Tuple.Create(1, 2, 3, 4, 5, 6, 7, 8, 9);
+            //var nineMemberTupleAttempt2 = Tuple<int, int, int, int, int, int, int, int, int>(1, 2, 3, 4, 5, 6, 7, 8, 9);
+        }
+
+        public static void TuplesCreation_ImmutabilityNoMemberAssignment() {
             Tuple<int, string> myTuple = new Tuple<int, string>(10, "tien");
 
             // Following does not compile: member assignment is not allowed
@@ -134,6 +142,18 @@ namespace ValueTuples
                 //Console.WriteLine($"Iterating ValueTuple theNumber: {namedTuple.theNumber} - theString: {namedTuple.theString}");
                 Console.WriteLine($"Iterating ValueTuple theNumberInList: {namedTuple.theNumberInList} - theStringInList: {namedTuple.theStringInList}");
             }
+        }
+
+        public static void ListOfTuples_IsImmutableBecauseOfTupleDefinition() {
+            List<Tuple<int, string>> tupleList = new List<Tuple<int, string>>() {
+                Tuple.Create(1, "een"),
+                Tuple.Create(2, "twee"),
+                Tuple.Create(3, "drie"),
+            };
+
+            // Following does not compile
+            //  Property or indexer 'Tuple<int, string>.Item1' cannot be assigned to --it is read only
+            //tupleList[0].Item1 = 1;
         }
     }
 }

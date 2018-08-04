@@ -1,6 +1,8 @@
 ﻿Our long trusted friend: Tuple
 ==============================
 
+
+
 The new kid in town: ValueTuple
 ===============================
 
