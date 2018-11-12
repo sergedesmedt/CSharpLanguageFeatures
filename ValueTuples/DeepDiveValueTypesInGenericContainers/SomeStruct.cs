@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ValueTuples
+namespace ValueTuples 
 {
-    class SomeClass
+    struct SomeStruct 
     {
         public int IntProperty {
             get;

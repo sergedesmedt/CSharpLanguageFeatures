@@ -1,0 +1,49 @@
+﻿<Window x:Class="ValueTuples.Binding.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ValueTuples.Binding.WPF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="367.729" Width="777.563">
+    <Grid>
+        <GroupBox Name="AnonymousTypeBinding" Header="Binding to Anonymous Type" Height="132" Margin="10,10,10,0" VerticalAlignment="Top">
+            <Grid Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Content="Label" Grid.Row="0" Grid.Column="0"/>
+                <Label Content="Label" Grid.Row="1" Grid.Column="0"/>
+                <Label Content="Label" Grid.Row="2" Grid.Column="0"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=SourceforAnonymousTypeText1, Mode=OneWay}" />
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=SourceforAnonymousTypeText2, Mode=OneWay}" />
+                <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Path=AnonymousSourceList}" SelectedValuePath="DataKey" DisplayMemberPath="DataValue" SelectionChanged="TargetforSourceList_SelectionChanged" />
+            </Grid>
+        </GroupBox>
+        <GroupBox Name="ValueTypeBinding" Header="Binding to ValueTuple" Height="134" Margin="10,147,10,0" VerticalAlignment="Top">
+            <Grid Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Content="Label" Grid.Row="0" Grid.Column="0"/>
+                <Label Content="Label" Grid.Row="1" Grid.Column="0"/>
+                <Label Content="Label" Grid.Row="2" Grid.Column="0"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Path=SourceforValueTypeText1, Mode=OneWay}" />
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Path=SourceforValueTypeText2, Mode=OneWay}" />
+                <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Path=ValueTypeSourceList}" SelectedValuePath="DataKeyField" DisplayMemberPath="DataValueField" SelectionChanged="TargetforSourceList_SelectionChanged" />
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Window>

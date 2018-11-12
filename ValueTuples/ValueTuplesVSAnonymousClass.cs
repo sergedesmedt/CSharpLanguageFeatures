@@ -11,8 +11,13 @@ namespace ValueTuples
         }
 
         public static void AValueTuple() {
-            var instance = ( TheInteger: 1, TheString: "tien" );
+            var instance = (TheInteger: 1, TheString: "tien");
         }
 
+        //public {TheInteger, TheString} AnAnonymousClass()
+        //{
+        //    var instance = new { TheInteger = 1, TheString = "tien" };
+        //    return instance;
+        //}
     }
 }

@@ -6,7 +6,8 @@ namespace ValueTuples
     {
         static void Main(string[] args)
         {
-            DoItWithOrdinaryTuples.CallingDecompositionFromTupleList();
+            DoItWithOrdinaryTuples.TuplesWithManyMembers_AtInfinitum();
+            //DoItWithValueTuples.TuplesWithManyMembers_AtInfinitum();
         }
     }
 }
