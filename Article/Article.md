@@ -3,18 +3,19 @@
 
 ## What are tuples and why would you need them?
 
-Tuples are a language construct which allows for the ad-hoc, ordered grouping of some values. Where a class allows to group several values, it is more used when this grouping has to be re-used and you also want to attach behaviour to these values. A tuple however allows to group some values "on the spot" and then to never use that grouping again.
+Tuples are a language construct which allows for the ad-hoc, ordered grouping of some values. Where a class allows to group several values, it is used more when this grouping has to be re-used and you also want to attach behaviour to these values. A tuple however allows to group some values "on the spot" and then to never use that grouping again.
 
 Tuples are sometimes also compared with a list of values, where the values can be given names and their type is fixed.
 
 ## There are `Tuple`s and there are `ValueTuple`s
 
-The main difference between a `Tuple` and a `ValueTuple `is that the `Tuple` type is a reference type, while the `ValueTuple` is a value type.
+The main difference between a `Tuple` and a `ValueTuple` is that the `Tuple` type is a reference type, while the `ValueTuple` is a value type.
 
 As a quick refresher, the main difference between a reference type and a value type is that the reference type is created on the heap and its lifetime is thus controlled through garbage collection, while a value type is created on the stack and its lifetime is controlled by the variable scope.
 
 Another difference is when variables are passed to methods: reference types are by default passed by reference while value types are passed by value. What this means in the end is that the content of what is referenced by a reference type can be changed in this method, while this is not true for value types: their content is copied when passed to a method. You can see this demonstrated in the code in the class `QuickRefresh_ReferenceTypeVsValueType`:
 
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/QuickRefreshValueTypes/QuickRefresh_ReferenceTypeVsValueType.cs)
 ```csharp
  public struct SomeValueType {
      public string TheValue;
@@ -40,7 +41,7 @@ Another difference is when variables are passed to methods: reference types are 
  }
 ```
 
-So, if we execute:
+So, if we execute following code:
 ```csharp
 SomeValueType vType = new SomeValueType() { 
     TheValue  = "vType.TheValue: Value before message call" 
@@ -63,7 +64,7 @@ We get the following output:
 ![Value Type behaviour vs Reference Type behaviour](valuetype_behaviour_output.PNG)
 
 Notice how:
- - for the value type, the value before and after the method call are the same, allthough we changed the value given to the method, inside the method. A copy was made before handing the value to the method and inside the method only this copy was changed.
+ - for the value type, the value before and after the method call are the same, allthough we changed the value given to the method, inside the method. This is because a copy was made before handing the value to the method and inside the method only this copy was changed.
  - for the reference type, the value after the method call is the same as the changed value in the method: no copy was made but a reference to the value was given to the method. The method operated on the same instance as was given to the method.
 
 There are a few consequences which result from this choice, but we will handle them when we are on the subject. So just remember that the old style `Tuple`s are reference types, thus a `class`,  and the new style `ValueTuple`s are value types, thus a `struct`.
@@ -106,7 +107,7 @@ public struct ValueTuple<T1,T2,T3>;
 public struct ValueTuple<T1,T2,T3,T4,T5,T6,T7,TRest>
 ```
 
-Each generic argument can be a different type. This allows the creation of tuples like:
+Again, each generic argument can be a different type. This allows the creation of tuples like:
 ```csharp
 ValueTuple<int> ...
 ValueTuple<int,char> ...
@@ -174,8 +175,6 @@ public class Tuple<T1,T2,T3> {
 
 ## Tuple Creation
 
-Both reference and value tuples are parameterized by generic parameters. Those generic parameters specify the type of the data items which will be stored in the tuple. The ordering of the generic parameters determins the ordering of the types in the tuple.
-
 There are a few ways you can create tuples and following sections will give a summary of the available options.
 
 ### By Constructor
@@ -186,10 +185,14 @@ Constructors are provided to create tuples containing up to 8 items. By using th
 Following examples create tuples with 2 data items of type `int` and `string` respectively.
 
 #### Syntax for Reference tuples
+
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithOrdinaryTuples.cs#L12-L14)
 ```csharp
 Tuple<int, string> myTuple = new Tuple<int, string>(10, "tien");
 ```
 #### Syntax for Value tuples
+
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L12-L14)
 ```csharp
 ValueTuple<int, string> myValueTuple = new ValueTuple<int, string>(10, "tien");
 ``` 
@@ -201,12 +204,16 @@ Of course, having to specify up to eight generic parameters can lead to a very v
 Following is an example of the factory method for a tuple with three data items. The type of the tuples data items is deduced by the compiler using generic parameter inference.
 
 #### Syntax for Reference tuples
+
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithOrdinaryTuples.cs#L16-L18)
 ```csharp
-var myTuple = Tuple.Create(10, "tien", false);
+var myTuple = Tuple.Create(10, "tien");
 ```
 #### Syntax for Value tuples
+
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L16-L18)
 ```csharp
-var myValueTuple = ValueTuple.Create(10, "tien", false);
+var myValueTuple = ValueTuple.Create(10, "tien");
 ``` 
 
 ### By Syntax Convention
@@ -214,11 +221,13 @@ Allthough the factory method already gives us a more terse syntax, with the new 
 This new syntax also gives the opportunity to access the members of the tuple with a chosen name, instead of the generic `Item1`, `Item2`, etc...
 
 #### Syntax for Value tuples
+
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L20-L36)
 ```csharp
 var myValueTuple = (10, "tien");
 var myNamedMemberValueTuple = (theNumber: 10, theText: "tien");
 Console.WriteLine($"The number is {myNamedMemberValueTuple.theNumber}"
-	+ " and the text is {myNamedMemberValueTuple.theText}");
+	+ $" and the text is {myNamedMemberValueTuple.theText}");
 
 // You do not have to supply new names for all members
 var partialNaming = (theNumber: 10, "tien");
@@ -247,7 +256,7 @@ Using [ILSpy](https://github.com/icsharpcode/ILSpy) we can see what the above co
 ValueTuple<int, string> myValueTuple = new ValueTuple<int, string>(10, "tien");  
 ValueTuple<int, string> myNamedMemberValueTuple = new ValueTuple<int, string>(10, "tien");
 Console.WriteLine($"The number is {myNamedMemberValueTuple.Item1}"
-	+ " and the text is {myNamedMemberValueTuple.Item2}");  
+	+ $" and the text is {myNamedMemberValueTuple.Item2}");  
 ``` 
 Notice how:
  - The creation of the `ValueTuple` with unnamed and named values eventually compiles to exactly the same code.
@@ -263,6 +272,7 @@ Another difference between the new `ValueTuple` and the old reference `Tuple` is
 Let's see what is possible and what is not.
 
 #### Syntax for Reference tuples
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithOrdinaryTuples.cs#L20-L78)
 ```csharp
 var sevenMemberByConstructor = new Tuple<int, int, int, int, int, int, int>(1, 2, 3, 4, 5, 6, 7);
 var sevenMemberByFactory = Tuple.Create(1, 2, 3, 4, 5, 6, 7);
@@ -273,6 +283,7 @@ var sevenMemberByFactory = Tuple.Create(1, 2, 3, 4, 5, 6, 7);
 
 var eightMemberByFactory = Tuple.Create(1, 2, 3, 4, 5, 6, 7, 8);
 Console.WriteLine($"Item1 is {eightMemberByFactory.Item1},"
+// ... more code here in the source files ...
 // There is no Item8 member
 // + $"Item8 is {eightMemberByFactory.Item8},"
 + $"Rest.Item1 has the value of the 8th argument {eightMemberByFactory.Rest.Item1},"
@@ -285,15 +296,9 @@ Console.WriteLine($"Item1 is {eightMemberByFactory.Item1},"
 // To specify more then eight members, we need to use nested tuples
 var tenMemberTupleByConstructor = new Tuple<int, int, int, int, int, int, int, Tuple<string, string, string>>(1, 2, 3, 4, 5, 6, 7, new Tuple<string, string, string>("een", "twee", "drie"));
 Console.WriteLine($"Item1 is {tenMemberTupleByConstructor.Item1},"
-+ $"Item2 is {tenMemberTupleByConstructor.Item2},"
-+ $"Item3 is {tenMemberTupleByConstructor.Item3},"
-+ $"Item4 is {tenMemberTupleByConstructor.Item4},"
-+ $"Item5 is {tenMemberTupleByConstructor.Item5},"
-+ $"Item6 is {tenMemberTupleByConstructor.Item6},"
-+ $"Item7 is {tenMemberTupleByConstructor.Item7},"
+// ... more code here in the source files ...
 + $"Rest.Item1 is {tenMemberTupleByConstructor.Rest.Item1},"
-+ $"Rest.Item2 is {tenMemberTupleByConstructor.Rest.Item2},"
-+ $"Rest.Item3 is {tenMemberTupleByConstructor.Rest.Item3},"
+// ... more code here in the source files ...
 );
 
 // As seen above, a strange thing happens using the factory method though:
@@ -302,15 +307,9 @@ var tenMemberTuple = Tuple.Create(1, 2, 3, 4, 5, 6, 7, Tuple.Create("een", "twee
 
 // Accessing the 8th, 9th and 10th tuple member is done through the Rest.Item1 member
 Console.WriteLine($"Item1 is {tenMemberTuple.Item1},"
-+ $"Item2 is {tenMemberTuple.Item2},"
-+ $"Item3 is {tenMemberTuple.Item3},"
-+ $"Item4 is {tenMemberTuple.Item4},"
-+ $"Item5 is {tenMemberTuple.Item5},"
-+ $"Item6 is {tenMemberTuple.Item6},"
-+ $"Item7 is {tenMemberTuple.Item7},"
+// ... more code here in the source files ...
 + $"Rest.Item1.Item1 is {tenMemberTuple.Rest.Item1.Item1},"
-+ $"Rest.Item1.Item2 is {tenMemberTuple.Rest.Item1.Item2},"
-+ $"Rest.Item1.Item3 is {tenMemberTuple.Rest.Item1.Item3},"
+// ... more code here in the source files ...
 );
 ```
 For the reference Tuples with eight members, following is the output:
@@ -323,13 +322,14 @@ For the reference Tuples with ten members, following is the output:
 
 As long as we only use seven or less members nothing special is happening.
 
-However, the eighth argument to the constructor with eight arguments is foreseen to be used exclusively for `Tuple`s with more the seven members. 
+However, the eighth argument to the constructor with eight arguments is foreseen to be used exclusively for `Tuple`s with more than seven members. 
 
 When using the constructor directly you must specify a `Tuple` type for the eighth argument, no other type will be accepted. You can then access the members of this `Tuple` through the `Rest` member: `Rest.Item1`, `Rest.Item2`, etc...
 
 When using the factory method, the eighth argument is wrapped inside a `Tuple` by the factory method. As a result, when specifying a nested `Tuple` for the factory method, you must access it through the `Rest.Item1` member and the members of the `Tuple` through `Rest.Item1.Item1`, `Rest.Item1.Item2`, etc... depending on the number of members specified, which is of course odd.
 
 #### Syntax for Value tuples
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L38-L117)
 ```csharp
 var sevenMemberByConstructor = new ValueTuple<int, int, int, int, int, int, int>(1, 2, 3, 4, 5, 6, 7);
 var sevenMemberByFactory = ValueTuple.Create(1, 2, 3, 4, 5, 6, 7);
@@ -343,26 +343,16 @@ var sevenMemberTuple = (1, 2, 3, 4, 5, 6, 7);
 var eightMemberByFactory = ValueTuple.Create(1, 2, 3, 4, 5, 6, 7, "acht");
 Console.
     WriteLine($"eightMemberByFactory is of type {eightMemberByFactory.GetType()}"
-    + $"Item1 is {eightMemberByFactory.Item1},"
-    + $"Item2 is {eightMemberByFactory.Item2},"
-    + $"Item3 is {eightMemberByFactory.Item3},"
-    + $"Item4 is {eightMemberByFactory.Item4},"
-    + $"Item5 is {eightMemberByFactory.Item5},"
-    + $"Item6 is {eightMemberByFactory.Item6},"
-    + $"Item7 is {eightMemberByFactory.Item7},"
+    // ... more code here in the source files ...
     + $"Item8 is {eightMemberByFactory.Item8} and of type {eightMemberByFactory.Item8.GetType()}: it is the eighth argument,"
-    + $"argument 8 through the Rest member is {eightMemberByFactory.Rest.Item1},"
+    + $"Argument 8 through the Rest member is {eightMemberByFactory.Rest.Item1},"
     );
 
 var eightMemberTuple = (1, 2, 3, 4, 5, 6, 7, "acht");
 Console.
-    WriteLine($"Item1 is {eightMemberTuple.Item1},"
-    + $"Item2 is {eightMemberTuple.Item2},"
-    + $"Item3 is {eightMemberTuple.Item3},"
-    + $"Item4 is {eightMemberTuple.Item4},"
-    + $"Item5 is {eightMemberTuple.Item5},"
-    + $"Item6 is {eightMemberTuple.Item6},"
-    + $"Item7 is {eightMemberTuple.Item7},"
+    WriteLine($$"eightMemberTuple is of type {eightMemberTuple.GetType()}"
+    + $"Item1 is {eightMemberTuple.Item1},"
+    // ... more code here in the source files ...
     + $"Item8 is {eightMemberTuple.Item8} and of type {eightMemberTuple.Item8.GetType()}: it is the eighth argument,"
     + $"Item8 through the Rest member is {eightMemberTuple.Rest.Item1},"
     );
@@ -372,13 +362,9 @@ Console.
 //var nineMemberByFactory = ValueTuple.Create(1, 2, 3, 4, 5, 6, 7, 8, 9);
 
 var nineMemberByNestedFactory = ValueTuple.Create(1, 2, 3, 4, 5, 6, 7, ValueTuple.Create("acht", "negen"));
-Console.WriteLine($"Item1 is {nineMemberByNestedFactory.Item1},"
-    + $"Item2 is {nineMemberByNestedFactory.Item2},"
-    + $"Item3 is {nineMemberByNestedFactory.Item3},"
-    + $"Item4 is {nineMemberByNestedFactory.Item4},"
-    + $"Item5 is {nineMemberByNestedFactory.Item5},"
-    + $"Item6 is {nineMemberByNestedFactory.Item6},"
-    + $"Item7 is {nineMemberByNestedFactory.Item7},"
+Console.WriteLine($"nineMemberByNestedFactory is of type {nineMemberByNestedFactory.GetType()}"
+    + $"Item1 is {nineMemberByNestedFactory.Item1},"
+    // ... more code here in the source files ...
     // We are accessing the ValueTupe here and NOT the string "acht" !!!!
     + $"Item8 is {nineMemberByNestedFactory.Item8} and of type {nineMemberByNestedFactory.Item8.GetType()},"
     + $"Item8 is {nineMemberByNestedFactory.Item8.Item1},"
@@ -391,26 +377,24 @@ Console.WriteLine($"Item1 is {nineMemberByNestedFactory.Item1},"
 // We can proceed adding members, but only using the syntax convention
 var nineMemberTupleAttempt1 = (1, 2, 3, 4, 5, 6, 7, "acht", "negen");
 // We can access them all with the regular ItemX syntax
-Console.WriteLine($"Item1 is {nineMemberTupleAttempt1.Item1},"
-    + $"Item2 is {nineMemberTupleAttempt1.Item2},"
-    + $"Item3 is {nineMemberTupleAttempt1.Item3},"
-    + $"Item4 is {nineMemberTupleAttempt1.Item4},"
-    + $"Item5 is {nineMemberTupleAttempt1.Item5},"
-    + $"Item6 is {nineMemberTupleAttempt1.Item6},"
-    + $"Item7 is {nineMemberTupleAttempt1.Item7},"
+Console.WriteLine($"nineMemberTupleBySyntax is of type {nineMemberTupleBySyntax.GetType()}"
+    + $"Item1 is {nineMemberTupleBySyntax.Item1},"
+    // ... more code here in the source files ...
     // We are accessing the string "acht" here and NOT the ValueTupe !!!!
-    + $"Item8 is {nineMemberTupleAttempt1.Item8},"
-    + $"Item8 through the Rest member is {nineMemberTupleAttempt1.Rest.Item1},"
-    + $"Item9 is {nineMemberTupleAttempt1.Item9},"
-    + $"Item9 through the Rest member is {nineMemberTupleAttempt1.Rest.Item1},"
+    + $"Item8 is {nineMemberTupleBySyntax.Item8},"
+    + $"Item8 through the Rest member is {nineMemberTupleBySyntax.Rest.Item1},"
+    + $"Item9 is {nineMemberTupleBySyntax.Item9},"
+    + $"Item9 through the Rest member is {nineMemberTupleBySyntax.Rest.Item1},"
     );
 ```
 For the ValueTuples with eight members, following is the output:
 
+> volgende screenshot is NIET correct 
 ![Value Type with eight members](valuetype_atinfinitum_eightmember.PNG)
 
 For the ValueTuples with nine members, following is the output:
 
+> volgende screenshot is NIET correct 
 ![Value Type with nine members](valuetype_atinfinitum_ninemember.PNG)
 
 Here also, with 7 or less members, nothing special is happening.
@@ -425,7 +409,10 @@ When usin the syntax convention for creation, the compiler knows how to deal wit
 
 
 #### Under the hood
-The above call actually gets compiled into following code (using C# 6.0 syntax)
+
+> Is onderstaande wel correct ? En moet er hier niet meer gedecompileerd staan?
+
+The above calls actually get compiled into following code (using C# 6.0 syntax)
 
 ```csharp
 ValueTuple<int, int, int, int, int, int, int, int> eightMemberByConstructor = new ValueTuple<int, int, int, int, int, int, int, int>(1, 2, 3, 4, 5, 6, 7, 8);
@@ -461,7 +448,7 @@ public ValueTuple(T1 item1, T2 item2, T3 item3, T4 item4, T5 item5, T6 item6, T7
 ```
 Notice how:
  - the last member type is named `TRest`: a clear indication that it is meant to contain the remaining values of the lot.
- - inside the constructor, the last value is checked to be derived of `IValueTupleInternal`: it has to be a `ValueTuple`! If not, an Exception is thrown.
+ - inside the constructor, the last value is checked to be derived of `IValueTupleInternal`: it has to be a `ValueTuple`! If not, an `Exception` is thrown.
 
 But then the question remains: how are these members accessed?
 
@@ -482,6 +469,7 @@ Notice how:
 Finally, can we create a tuple with the default constructor? Let's find out.
 
 #### Syntax for Reference Tuples
+The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithOrdinaryTuples.cs#L80-L83)
 ```csharp
 // Following does not compile
 //Tuple<int, string> myTuple = new Tuple<int, string>();
@@ -489,6 +477,7 @@ Finally, can we create a tuple with the default constructor? Let's find out.
 Reference `Tuple`s are strictly readonly, meaning, there are no setters for the members. So a default constructor is not provided for this type because you cannot assign values to the members after construction. Reference `Tuple`s are immutable (see further).
 
 #### Syntax for Value Tuples
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L119-L122)
 ```csharp
 ValueTuple<int, string> myTuple = new ValueTuple<int, string>();
 ```
@@ -501,6 +490,7 @@ If you search the internet for general information about tuples, you'll find tha
 ### Member Assignment
 
 #### Syntax for Reference Tuples
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithOrdinaryTuples.cs#L89-L95)
 ```csharp
 Tuple<int, string> myTuple = new Tuple<int, string>(10, "tien");
 
@@ -511,6 +501,7 @@ Tuple<int, string> myTuple = new Tuple<int, string>(10, "tien");
 For reference `Tuple`s, the members cannot be assigned: they are C# *properties* with only a getter and no setter. They can only be given values during construction.
 
 #### Syntax for Value Tuples
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L128-L134)
 ```csharp
 ValueTuple<int, string> myTuple = new ValueTuple<int, string>(10, "tien");
 
@@ -518,11 +509,12 @@ ValueTuple<int, string> myTuple = new ValueTuple<int, string>(10, "tien");
 myTuple.Item1 = 21;
 myTuple.Item2 = "twinig";
 ```
-For `ValueTuple`s, the members can be assigned: they are merely *fields* in the struct a `ValueTuple` is, and thus can be altered. But, then does this not break the immutability property of a tuple? Things aren't as bad as one might suspect.
+For `ValueTuple`s, the members can be assigned: they are merely *fields* in the struct a `ValueTuple` is and thus can be altered. But does this not break the immutability property of a tuple? Things aren't as bad as one might suspect.
 
 ### As Items in Generic Containers
 
 #### Syntax for Reference Tuples
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithOrdinaryTuples.cs#L97-L107)
 ```csharp
 List<Tuple<int, string>> tupleList = new List<Tuple<int, string>>() {
     Tuple.Create(1, "een"),
@@ -537,6 +529,7 @@ List<Tuple<int, string>> tupleList = new List<Tuple<int, string>>() {
 No surprises here: the items in a reference `Tuple` are not assignable, so they won't be in a list neither
 
 #### Syntax for Value Tuples
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L136-L165)
 ```csharp
 List<(int, string)> myTupleList = new List<(int, string)>() {
     (1, "een"),
@@ -549,6 +542,8 @@ List<(int, string)> myTupleList = new List<(int, string)>() {
 //myTupleList[0].Item1 = 10;
 ```
 Well, this may come as a surprise: the code for assigning the members of the tuple doesn't compile neither. The problem is that to return the value the C# compiler creates a temporary variable which contains a copy of the value in the list. But because this variable is temporary it cannot be changed. What is more, even the value added to the list is not really the created value, but rather a copy of the created value.
+
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L136-L165)
 ```csharp
 var temp = myTupleList[0];
 temp.Item1 = 10;
@@ -604,6 +599,7 @@ The magic however is in the implemetation of a generic `List<T>` for value types
 Nothing special here: the Tuple is immutable, and thus we cannot change it
 
 #### Syntax for Value Types
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L167-L190)
 ```csharp
 public static ValueTuple<int, string> ActionOnTuple(
 	ValueTuple<int, string> tuple, 
@@ -632,7 +628,7 @@ Console.WriteLine($"Tuple.ValueTuple - byRefTuple after item1: {byRefTuple.Item1
 Console.WriteLine($"Return.ValueTuple - returnTuple item1: {returnTuple.Item1} - item2: {returnTuple.Item2}");
 ```
 
-Because of the pass-by-value / copy semantics of value types, when passing a `ValueTupe` as a parameter to a method, or returning a `ValueTuple` from a method a copy is made, so we cannot change the members of the object passed as an argument to the method, from inside the method.
+Because of the pass-by-value / copy semantics of value types, when passing a `ValueTupe` as a parameter to a method  or returning a `ValueTuple` from a method, a copy is made so we cannot change the members of the object passed as an argument to the method, from inside the method.
 
 However, when passing the parameter by `ref` then we can change the value inside the method. That is the whole purpose of passing parameters by `ref`: to be able to change the value.
 
@@ -654,6 +650,7 @@ Following is a simple refresh on Deconstruction. It is not my intention to provi
 
 #### Constructors
 We all know constructors of classes: they provide a point of initialization for the members of the class. They allow you to provide initial values for the members. Those values can be defined in the constructor themselves, or they can be provided to the constructor as parameters in the constructor call:
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/QuickRefreshDeconstruction/ClassWithConstructors.cs#L6-L26)
 ```csharp
 public class ClassWithConstructors {
     public ClassWithConstructors() {
@@ -676,7 +673,9 @@ public class ClassWithConstructors {
         set;
     }
 }
-
+```
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/QuickRefreshDeconstruction/QuickRefresh_Deconstruction.cs#L8-L20)
+```csharp
 var theDefaultConstructedObject = new ClassWithConstructors();
 Console.WriteLine("Default constructed object has values >"+
     $" PropertyOfTypeInt: {theDefaultConstructedObject.PropertyOfTypeInt}" +
@@ -695,6 +694,7 @@ But, what if we wanted to "un-group" those properties back into seperate values?
 
 #### Deconstructor
 Deconstructors provide for the opposite operation: they allow to decompose/deconstruct an object of a class into its seperate components by assigning them to seperate variables. For that we define a `Deconstructor` for the class:
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/QuickRefreshDeconstruction/ClassWithDeconstructor.cs#L6-L26)
 ```csharp
 public class ClassWithDeconstructor {
     public ClassWithDeconstructor(int externalValueForInt, string externalValueForString) {
@@ -717,7 +717,9 @@ public class ClassWithDeconstructor {
         set;
     }
 }
-
+```
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/QuickRefreshDeconstruction/QuickRefresh_Deconstruction.cs#L22-L34)
+```csharp
 int externalValueForInt = 10;
 string externalValueForString = "External value for the string property";
 var theCustomConstructedObject = new ClassWithDeconstructor(externalValueForInt, externalValueForString);
@@ -739,6 +741,7 @@ Notice how:
 As mentioned above, deconstruction allows the capturing of the various components of a class/struct into seperate variables. Deconstruction can be done into new variables, existing variables, ignoring certain components, etc... In this article we will focus on Deconstruction into new variables, not ignoring any components.
 
 #### Syntax for Reference tuples
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithOrdinaryTuples.cs#L145-L149)
 ```csharp
 var theTuple = Tuple.Create(11, "elf");
 var (theNumber, theString) = theTuple;
@@ -747,6 +750,7 @@ Console.WriteLine($"Tuple item1 through variable theNumber: {theNumber} - item2 
 Don't be fooled by the syntax resembling how a `ValueTuple` is returned from a method: we effectively created two separate and independent variables here as can be seen from using them inside the `Console.WriteLine` statement.
 
 #### Syntax for Value tuples
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L228-L232)
 ```csharp
 var theTuple = ValueTuple.Create(11, "elf");
 var (theNumber, theString) = theTuple;
@@ -786,6 +790,7 @@ ValueTuples however behave largely as value types being returned from methods or
 ### As Return Values
 
 #### Syntax  for Reference tuples
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithOrdinaryTuples.cs#L157-L164)
 ```csharp
 public static Tuple<int, string> GiveMeTheTuple() {
     return Tuple.Create(11, "elf");
@@ -797,12 +802,14 @@ Console.WriteLine($"Tuple item1: {tuple.Item1} - item2: {tuple.Item2}");
 Nothing special here: a reference to the tuple created in the method is returned to the caller, and we can then access it's properties through the usual dot operator.
 
 Of course, just as we can deconstruct reference tuples created in our code, we can also deconstruct reference tuples returned from a method:
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithOrdinaryTuples.cs#L166-L169)
 ```csharp
 var (theNumber, theString) = GiveMeTheTuple();
 Console.WriteLine($"Tuple item1 through variable theNumber: {theNumber} - item2 through variable theString: {theString}");
 ```
 
 #### Syntax for Value tuples
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L240-L247)
 ```csharp
 public static (int, string) GiveMeTheTuple_Anonymous() {
     return (11, "elf");
@@ -814,6 +821,8 @@ Console.WriteLine($"Tuple item1: {tuple.Item1} - item2: {tuple.Item2}");
 Again, nothing special here: just a value type being returned and accessed through it's public fields.
 
 And here also, deconstruction can be done of the value returned
+
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L249-L252)
 ```csharp
 var (theNumber, theString) = GiveMeTheTuple_Anonymous();
 Console.WriteLine($"Tuple item1 through variable theNumber: {theNumber} - item2 through variable theString: {theString}");
@@ -821,13 +830,15 @@ Console.WriteLine($"Tuple item1 through variable theNumber: {theNumber} - item2 
 
 #### Syntax for Value tuples: named members
 When we used ValueTuples as a regular variable, we where able to name the members. We can do the same when we return a ValueTuple from a method: we provide the names in the signature of the method.
+
+
 ```csharp
 public static (int theNumber, string theString) GiveMeTheTuple_Named() {
     return (11, "elf");
 }
 
 var tuple = GiveMeTheTuple_Named();
-Console.WriteLine($"Tuple item1 through variable theNumber: {tuple.Item1} - item2 through variable theString: {tuple.Item2}");
+Console.WriteLine($"Tuple item1 through member Item1: {tuple.Item1} - item2 through member Item2: {tuple.Item2}");
 Console.WriteLine($"Tuple item1 through variable theNumber: {tuple.theNumber} - item2 through variable theString: {tuple.theString}");
 ```
 When calling the method, we can use the names given in the method's signature, or we can use the regular Item1, Item2, etc... names.
@@ -1280,7 +1291,7 @@ So, what do you need to remember?
 
 ## References
 
-The strange behaviour when instantiating Tuples with more than 7 members through the factory mehtod did not get unnoticed: [List Tuple more than 8 items](https://stackoverflow.com/questions/24263598/list-tuple-more-than-8-items)
+The strange behaviour when instantiating Tuples with more than 7 members through the factory method did not get unnoticed: [List Tuple more than 8 items](https://stackoverflow.com/questions/24263598/list-tuple-more-than-8-items)
 
 For those looking for a detailed explanation of ValueTuples with respect to being able to give names to the elements of a ValueTuples, following is a very informative article:
 [C# Tuples. More about element names.](http://mustoverride.com/tuples_names/)

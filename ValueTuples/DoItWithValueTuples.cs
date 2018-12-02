@@ -79,7 +79,7 @@ namespace ValueTuples
             //var nineMemberByFactory = ValueTuple.Create(1, 2, 3, 4, 5, 6, 7, 8, 9);
 
             var nineMemberByNestedFactory = ValueTuple.Create(1, 2, 3, 4, 5, 6, 7, ValueTuple.Create("acht", "negen"));
-            Console.WriteLine($"nineMemberByNestedFactory is of type {eightMemberTuple.GetType()}"
+            Console.WriteLine($"nineMemberByNestedFactory is of type {nineMemberByNestedFactory.GetType()}"
                 + Environment.NewLine + $"Item1 is {nineMemberByNestedFactory.Item1},"
                 + Environment.NewLine + $"Item2 is {nineMemberByNestedFactory.Item2},"
                 + Environment.NewLine + $"Item3 is {nineMemberByNestedFactory.Item3},"
@@ -99,7 +99,7 @@ namespace ValueTuples
             // We can proceed adding members, but only using the syntax convention
             var nineMemberTupleBySyntax= (1, 2, 3, 4, 5, 6, 7, "acht", "negen");
             // We can access them all with the regular ItemX syntax
-            Console.WriteLine($"nineMemberTupleBySyntax is of type {eightMemberTuple.GetType()}"
+            Console.WriteLine($"nineMemberTupleBySyntax is of type {nineMemberTupleBySyntax.GetType()}"
                 + Environment.NewLine + $"Item1 is {nineMemberTupleBySyntax.Item1},"
                 + Environment.NewLine + $"Item2 is {nineMemberTupleBySyntax.Item2},"
                 + Environment.NewLine + $"Item3 is {nineMemberTupleBySyntax.Item3},"
@@ -111,7 +111,7 @@ namespace ValueTuples
                 + Environment.NewLine + $"Item8 is {nineMemberTupleBySyntax.Item8},"
                 + Environment.NewLine + $"Item8 through the Rest member is {nineMemberTupleBySyntax.Rest.Item1},"
                 + Environment.NewLine + $"Item9 is {nineMemberTupleBySyntax.Item9},"
-                + Environment.NewLine + $"Item9 through the Rest member is {nineMemberTupleBySyntax.Rest.Item1},"
+                + Environment.NewLine + $"Item9 through the Rest member is {nineMemberTupleBySyntax.Rest.Item2},"
                 );
 
         }
@@ -275,18 +275,18 @@ namespace ValueTuples
 
         public static void CallingTheTuple_Named() {
             var tuple = GiveMeTheTuple_Named();
-            Console.WriteLine($"Tuple item1 through variable theNumber: {tuple.Item1} - item2 through variable theString: {tuple.Item2}");
+            Console.WriteLine($"Tuple item1 through member Item1: {tuple.Item1} - item2 through member Item2: {tuple.Item2}");
             Console.WriteLine($"Tuple item1 through variable theNumber: {tuple.theNumber} - item2 through variable theString: {tuple.theString}");
 
             var tupleMixedNames = GiveMeTheTuple_MixedNamed();
             Console.WriteLine($"Tuple item1 through variable theNumber: {tupleMixedNames.theNumber} - item2 through variable theString: {tupleMixedNames.theString}");
             // Following will not compile !!!
             // The internal used names inside the function are lost
-            //Console.WriteLine($"Tuple item1 through variable theNumber: {tupleMixedNames.internalInteger} - item2 through variable theString: {tupleMixedNames.internalString}");
+            //Console.WriteLine($"Tuple item1 through variable internalInteger: {tupleMixedNames.internalInteger} - item2 through variable internalString: {tupleMixedNames.internalString}");
             // The internal used names inside the function are also lost when we do NOT provide explicit names for the return value
             var tupleInternalNames = GiveMeTheTuple_InternallyNamed();
             // Following will not compile !!!
-            //Console.WriteLine($"Tuple item1 through variable theNumber: {tupleInternalNames.internalInteger} - item2 through variable theString: {tupleInternalNames.internalString}");
+            //Console.WriteLine($"Tuple item1 through variable internalInteger: {tupleInternalNames.internalInteger} - item2 through variable internalString: {tupleInternalNames.internalString}");
         }
 
         #endregion
