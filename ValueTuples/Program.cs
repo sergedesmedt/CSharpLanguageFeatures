@@ -6,8 +6,10 @@ namespace ValueTuples
     {
         static void Main(string[] args)
         {
-            DoItWithOrdinaryTuples.TuplesWithManyMembers_AtInfinitum();
-            //DoItWithValueTuples.TuplesWithManyMembers_AtInfinitum();
+            DoItWithOrdinaryTuples.IdentityandEquality();
+            DoItWithValueTuples.IdentityandEquality();
+
+            QuickRefresh_Deconstruction.DeconstructionOfObjectOfType_ClassWithDeconstructor();
         }
     }
 }

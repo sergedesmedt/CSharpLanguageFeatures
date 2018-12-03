@@ -389,12 +389,10 @@ Console.WriteLine($"nineMemberTupleBySyntax is of type {nineMemberTupleBySyntax.
 ```
 For the ValueTuples with eight members, following is the output:
 
-> volgende screenshot is NIET correct 
 ![Value Type with eight members](valuetype_atinfinitum_eightmember.PNG)
 
 For the ValueTuples with nine members, following is the output:
 
-> volgende screenshot is NIET correct 
 ![Value Type with nine members](valuetype_atinfinitum_ninemember.PNG)
 
 Here also, with 7 or less members, nothing special is happening.
@@ -415,11 +413,13 @@ When usin the syntax convention for creation, the compiler knows how to deal wit
 The above calls actually get compiled into following code (using C# 6.0 syntax)
 
 ```csharp
-ValueTuple<int, int, int, int, int, int, int, int> eightMemberByConstructor = new ValueTuple<int, int, int, int, int, int, int, int>(1, 2, 3, 4, 5, 6, 7, 8);
-ValueTuple<int, int, int, int, int, int, int, ValueTuple<int>> eightMemberByFactory = ValueTuple.Create(1, 2, 3, 4, 5, 6, 7, 8);
+ValueTuple<int, int, int, int, int, int, int> sevenMemberByConstructor = new ValueTuple<int, int, int, int, int, int, int>(1, 2, 3, 4, 5, 6, 7);
+ValueTuple<int, int, int, int, int, int, int> sevenMemberByFactory = ValueTuple.Create(1, 2, 3, 4, 5, 6, 7);
 ValueTuple<int, int, int, int, int, int, int> sevenMemberTuple = new ValueTuple<int, int, int, int, int, int, int>(1, 2, 3, 4, 5, 6, 7);
-ValueTuple<int, int, int, int, int, int, int, ValueTuple<int>> eightMemberTuple = new ValueTuple<int, int, int, int, int, int, int, ValueTuple<int>>(1, 2, 3, 4, 5, 6, 7, new ValueTuple<int>(8));
-ValueTuple<int, int, int, int, int, int, int, ValueTuple<int, int>> nineMemberTupleAttempt = new ValueTuple<int, int, int, int, int, int, int, ValueTuple<int, int>>(1, 2, 3, 4, 5, 6, 7, new ValueTuple<int, int>(8, 9));
+ValueTuple<int, int, int, int, int, int, int, ValueTuple<string>> eightMemberByFactory = ValueTuple.Create(1, 2, 3, 4, 5, 6, 7, "acht");
+ValueTuple<int, int, int, int, int, int, int, ValueTuple<string>> eightMemberTuple = new ValueTuple<int, int, int, int, int, int, int, ValueTuple<string>>(1, 2, 3, 4, 5, 6, 7, new ValueTuple<string>("acht"));
+ValueTuple<int, int, int, int, int, int, int, ValueTuple<ValueTuple<string, string>>> nineMemberByNestedFactory = ValueTuple.Create(1, 2, 3, 4, 5, 6, 7, ValueTuple.Create("acht", "negen"));
+ValueTuple<int, int, int, int, int, int, int, ValueTuple<string, string>> nineMemberTupleBySyntax = new ValueTuple<int, int, int, int, int, int, int, ValueTuple<string, string>>(1, 2, 3, 4, 5, 6, 7, new ValueTuple<string, string>("acht", "negen"));
 ```
 Notice how:
 - creation through the constructor and factory method gets compiled to a respective constructor call and a call of the factory method.
@@ -469,7 +469,7 @@ Notice how:
 Finally, can we create a tuple with the default constructor? Let's find out.
 
 #### Syntax for Reference Tuples
-The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithOrdinaryTuples.cs#L80-L83)
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithOrdinaryTuples.cs#L80-L83)
 ```csharp
 // Following does not compile
 //Tuple<int, string> myTuple = new Tuple<int, string>();
@@ -650,6 +650,7 @@ Following is a simple refresh on Deconstruction. It is not my intention to provi
 
 #### Constructors
 We all know constructors of classes: they provide a point of initialization for the members of the class. They allow you to provide initial values for the members. Those values can be defined in the constructor themselves, or they can be provided to the constructor as parameters in the constructor call:
+
 [The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/QuickRefreshDeconstruction/ClassWithConstructors.cs#L6-L26)
 ```csharp
 public class ClassWithConstructors {
@@ -694,6 +695,7 @@ But, what if we wanted to "un-group" those properties back into seperate values?
 
 #### Deconstructor
 Deconstructors provide for the opposite operation: they allow to decompose/deconstruct an object of a class into its seperate components by assigning them to seperate variables. For that we define a `Deconstructor` for the class:
+
 [The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/QuickRefreshDeconstruction/ClassWithDeconstructor.cs#L6-L26)
 ```csharp
 public class ClassWithDeconstructor {
@@ -732,6 +734,8 @@ Console.WriteLine("The decomposition of the object results in following values >
                 $" targetForInt: {targetForInt}" +
                 $" targetForString: {targetForString}");
 ```
+![Output of the code](quickrefresh_deconstruction_deconstructionofobjectoftype_classwithdeconstructor.PNG)
+
 Notice how:
  - The Deconstructor always has the name `Deconstructor`!
  - For the printing of the properties of the class, we have to use the dot-syntax for class members: the variable name of the object, a dot and finally the name of the property
@@ -802,6 +806,7 @@ Console.WriteLine($"Tuple item1: {tuple.Item1} - item2: {tuple.Item2}");
 Nothing special here: a reference to the tuple created in the method is returned to the caller, and we can then access it's properties through the usual dot operator.
 
 Of course, just as we can deconstruct reference tuples created in our code, we can also deconstruct reference tuples returned from a method:
+
 [The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithOrdinaryTuples.cs#L166-L169)
 ```csharp
 var (theNumber, theString) = GiveMeTheTuple();
@@ -831,7 +836,7 @@ Console.WriteLine($"Tuple item1 through variable theNumber: {theNumber} - item2 
 #### Syntax for Value tuples: named members
 When we used ValueTuples as a regular variable, we where able to name the members. We can do the same when we return a ValueTuple from a method: we provide the names in the signature of the method.
 
-
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L254-L290)
 ```csharp
 public static (int theNumber, string theString) GiveMeTheTuple_Named() {
     return (11, "elf");
@@ -844,6 +849,8 @@ Console.WriteLine($"Tuple item1 through variable theNumber: {tuple.theNumber} - 
 When calling the method, we can use the names given in the method's signature, or we can use the regular Item1, Item2, etc... names.
 
 What does NOT work is give the names inside the method:
+
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L254-L290)
 ```csharp
 public static (int, string) GiveMeTheTuple_InternallyNamed() {
     return (internalInteger: 11, internalString: "elf");
@@ -907,6 +914,8 @@ In the sample code you'll also find examples for nested `ValueTuple`s, mixed nam
 ### As Arguments to Methods
 
 #### Syntax for reference `Tuple`s
+
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithOrdinaryTuples.cs#L175-L182)
 ```csharp
 public static void AcceptTheTuple(Tuple<int, string> arg) {
     Console.WriteLine($"Tuple item1 through the member: {arg.Item1} - item2 through the member: {arg.Item2}");
@@ -918,6 +927,8 @@ AcceptTheTuple(tuple);
 Nothing special here: a reference to the tuple is given to the method which can then use it internally.
 
 #### Syntax for ValueTuples
+
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L296-L336)
 ```csharp
 public static void AcceptTheTuple_Anonymous((int, string) arg) {
     Console.WriteLine($"Tuple item1 through the member: {arg.Item1} - item2 through the member: {arg.Item2}");
@@ -938,6 +949,8 @@ Notice how:
 
 #### Syntax for Value tuples: named members
 Can we provide names for the fields of a ValueTuple used as an argument to a function? Well, yes we can, but only in the signature of the method:
+
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L296-L336)
 ```csharp
 public static void AcceptTheTuple_Named((int theNumber, string theString) arg) {
     // Following does not compile: the parameter is a tuple and not two deconstructed values
@@ -960,6 +973,8 @@ AcceptTheTuple_Named(someNamedTupe);
 *A quick note here: allthough the syntax for Deconstruction and `ValueTuple`s is similar, they are of course completely distinct features: where Deconstruction puts the components directly in variables, with `ValueTuple`s you define a single variable (`arg` in this case) and give the members of the tuple distinct names (`theNumber` and `theString`)*
 
 #### Method overloading
+
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L300-L310)
 ```csharp
 public static void AcceptTheTuple_Named((int theNumber, string theString) arg) {
     // Following does not compile: the parameter is a tuple and not two deconstructed values
@@ -992,6 +1007,8 @@ This may come as a surprise, after all we don't need those names anymore inside 
 Allthough the names are not considered for *method overloading*, they are considered for *method overriding*. It is NOT allowed to change the names of the components of a `ValueType` used as an argument to a method when defining an override for that method.
 
 Following is an example using interfaces, but in the accompaning code you can find similar code for abstract methods and virtual methods.
+
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/InterfaceMethodsInterfaceImpl.cs#L6-L69)
 ```csharp
 public interface IInterfaceMethods {
     (int, string) AnonymousTupleAsReturn();
@@ -1069,6 +1086,8 @@ public void AnonymousTupleAsArgument((int, string) argWithAnotherName)
 
 ### ValueTuples and Generics
 Because names in a certain scope are resolved by the compiler, we can use the names in the following case:
+
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L346-L363)
 ```csharp
 public static T DoSomethingWithTheArgument<T>(T arg) {
     return arg;
@@ -1097,6 +1116,8 @@ public static (int theNumber, string theString) DoSomethingWithTheArgument((int 
 }
 ```
 There is no intelligence infering names spread across tuples:
+
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L365-L378)
 ```csharp
 public static (T, V) DoSomeMoreWithTheArguments<T, U, V, W>((T, U) arg1, (V, W) arg2)
 {
@@ -1115,6 +1136,8 @@ The last line won't compile because the names given to the arguments are not "tr
 ### ValueTuples and Extension methods
 
 ValueTuples with the same types but different names are not considered as having different types. So, just as you cannot use names to differentiate between overloaded methods, you cannot use names to differentiate between extension methods:
+
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L384-L400)
 ```csharp
 public class ClassToExtend
 {
@@ -1279,7 +1302,7 @@ public {TheInteger, TheString} AnAnonymousClass()
 }
 ```
 
-The only way to return or pass an anonymous type as an argument is to use the `object` type, but of course it is then difficult to access any members of the type: how do you now what members it has? To what type must you cast it? There are a few ways to solve this problem (see the article in th reference section) but it is better not to use anonymous types as return types or argument types from and to methods.
+The only way to return or pass an anonymous type as an argument is to use the `object` type, but of course it is then difficult to access any members of the type: how do you now what members it has? To what type must you cast it? There are a few ways to solve this problem (see the article in the reference section) but it is better not to use anonymous types as return types or argument types from and to methods.
 
 
 ## Conclusion
