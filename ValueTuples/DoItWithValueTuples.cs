@@ -193,7 +193,7 @@ namespace ValueTuples
 
         #region Identity and Equality
 
-        public static void IdentityandEquality()
+        public static void IdentityAndEquality()
         {
             var myTuple1 = (10, "tien");
             var myTuple2 = (10, "tien");
@@ -207,7 +207,7 @@ namespace ValueTuples
 
         }
 
-        public static void EqualityAndImmutability()
+        public static void IdentityAndEquality_Immutability()
         {
             var myTuple1 = (10, "tien");
             var myTuple3 = myTuple1;
@@ -217,8 +217,8 @@ namespace ValueTuples
 
             myTuple3.Item1 = 11;
 
-            Console.WriteLine($"myTuple1 equals myTuple3: {Object.Equals(myTuple1, myTuple3)}");
-            Console.WriteLine($"myTuple1 equals myTuple3: {Object.ReferenceEquals(myTuple1, myTuple3)}");
+            Console.WriteLine($"myTuple1 equals edited myTuple3: {Object.Equals(myTuple1, myTuple3)}");
+            Console.WriteLine($"myTuple1 equals edited myTuple3: {Object.ReferenceEquals(myTuple1, myTuple3)}");
         }
 
         #endregion

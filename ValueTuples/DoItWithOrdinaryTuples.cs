@@ -124,7 +124,7 @@ namespace ValueTuples
 
         #region Identity and Equality
 
-        public static void IdentityandEquality()
+        public static void IdentityAndEquality()
         {
             var myTuple1 = new Tuple<int, string>(10, "tien");
             var myTuple2 = new Tuple<int, string>(10, "tien");

@@ -1,5 +1,4 @@
-﻿
-# Tuples in C#
+﻿# Tuples in C#
 
 ## What are tuples and why would you need them?
 
@@ -468,7 +467,7 @@ Notice how:
 ### Default Constructor
 Finally, can we create a tuple with the default constructor? Let's find out.
 
-#### Syntax for Reference Tuples
+#### Syntax for Reference tuples
 [The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithOrdinaryTuples.cs#L80-L83)
 ```csharp
 // Following does not compile
@@ -476,7 +475,7 @@ Finally, can we create a tuple with the default constructor? Let's find out.
 ```
 Reference `Tuple`s are strictly readonly, meaning, there are no setters for the members. So a default constructor is not provided for this type because you cannot assign values to the members after construction. Reference `Tuple`s are immutable (see further).
 
-#### Syntax for Value Tuples
+#### Syntax for Value tuples
 [The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L119-L122)
 ```csharp
 ValueTuple<int, string> myTuple = new ValueTuple<int, string>();
@@ -489,7 +488,7 @@ If you search the internet for general information about tuples, you'll find tha
 
 ### Member Assignment
 
-#### Syntax for Reference Tuples
+#### Syntax for Reference tuples
 [The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithOrdinaryTuples.cs#L89-L95)
 ```csharp
 Tuple<int, string> myTuple = new Tuple<int, string>(10, "tien");
@@ -500,7 +499,7 @@ Tuple<int, string> myTuple = new Tuple<int, string>(10, "tien");
 ```
 For reference `Tuple`s, the members cannot be assigned: they are C# *properties* with only a getter and no setter. They can only be given values during construction.
 
-#### Syntax for Value Tuples
+#### Syntax for Value tuples
 [The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L128-L134)
 ```csharp
 ValueTuple<int, string> myTuple = new ValueTuple<int, string>(10, "tien");
@@ -513,7 +512,7 @@ For `ValueTuple`s, the members can be assigned: they are merely *fields* in the 
 
 ### As Items in Generic Containers
 
-#### Syntax for Reference Tuples
+#### Syntax for Reference tuples
 [The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithOrdinaryTuples.cs#L97-L107)
 ```csharp
 List<Tuple<int, string>> tupleList = new List<Tuple<int, string>>() {
@@ -528,7 +527,7 @@ List<Tuple<int, string>> tupleList = new List<Tuple<int, string>>() {
 ```
 No surprises here: the items in a reference `Tuple` are not assignable, so they won't be in a list neither
 
-#### Syntax for Value Tuples
+#### Syntax for Value tuples
 [The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L136-L165)
 ```csharp
 List<(int, string)> myTupleList = new List<(int, string)>() {
@@ -595,10 +594,10 @@ The magic however is in the implemetation of a generic `List<T>` for value types
 
 ### As Return type or Argument to/from a Method
 
-#### Syntax for Reference Types
+#### Syntax for Reference types
 Nothing special here: the Tuple is immutable, and thus we cannot change it
 
-#### Syntax for Value Types
+#### Syntax for Value types
 [The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L167-L190)
 ```csharp
 public static ValueTuple<int, string> ActionOnTuple(
@@ -642,8 +641,96 @@ Notice how:
 	 1. A first copy is being made when passing the `ValueTuple` as an argument to the method
 	 2. A second copy is being made when passing the return value back to the calling method. 
 
+## Identity and Equality
+
+Let us first talk about the difference between equality and identity:
+- Identity (or reference equality) refers to the fact that two variables refer to the same object in memory.
+- Equality (or value equality) refers to the fact that two variables or objects refer to the same "thing": the values of the objects they refer to are the same.
+
+As such, if two different instances of a class have the same values for their data members, they have a different identity but can be equal. In the reference section below you can find a link to a codeproject article which explains it very well.
+
+### Identity and Equality of variables
+
+The differences in identity and equality between ordinary reference `Tuple`s and `ValueTuple`s basically boil down to the differences which exist for reference types and value types.
+
+#### Behaviour for Reference tuples
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithOrdinaryTuples.cs#L127-L139)
+```csharp
+var myTuple1 = new Tuple<int, string>(10, "tien");
+var myTuple2 = new Tuple<int, string>(10, "tien");
+var myTuple3 = myTuple1;
+
+Console.WriteLine($"myTuple1 equals myTuple2: {Object.Equals(myTuple1, myTuple2)}");
+Console.WriteLine($"myTuple1 equals myTuple2: {Object.ReferenceEquals(myTuple1, myTuple2)}");
+
+Console.WriteLine($"myTuple1 equals myTuple3: {Object.Equals(myTuple1, myTuple3)}");
+Console.WriteLine($"myTuple1 equals myTuple3: {Object.ReferenceEquals(myTuple1, myTuple3)}");
+```
+
+We get the following output:
+
+![Reference Type identity and equality](ordinarytuple_identityandequality.PNG)
+
+Notice how:
+- Two instances of tuples of the same type do not have reference equality but do have value equality.
+- If assigning one instance to another variable, then we have for these variables both reference and value equality.
+
+#### Behaviour for Value tuples
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L196-L208)
+```csharp
+var myTuple1 = (10, "tien");
+var myTuple2 = (10, "tien");
+var myTuple3 = myTuple1;
+
+Console.WriteLine($"myTuple1 equals myTuple2: {Object.Equals(myTuple1, myTuple2)}");
+Console.WriteLine($"myTuple1 equals myTuple2: {Object.ReferenceEquals(myTuple1, myTuple2)}");
+
+Console.WriteLine($"myTuple1 equals myTuple3: {Object.Equals(myTuple1, myTuple3)}");
+Console.WriteLine($"myTuple1 equals myTuple3: {Object.ReferenceEquals(myTuple1, myTuple3)}");
+```
+
+We get the following output:
+
+![Value Type identity and equality](valuetuple_identityandequality.PNG)
+
+Notice how:
+- Two instances of tuples of the same type do not have reference equality but do have value equality.
+- If assigning one instance to another variable, then for these variables we still don't have reference equality.
+
+This last remark is a direct consequence of the value semantics of valuetypes.
+
+### Equality and Immutability
+What is the influence of changing variables on the equality
+
+#### Behaviour for Reference tuples
+Not much to discuss here: you can't change reference tuples. Once they are instantiated they always keep the same values
+
+#### Behaviour for Value tuples
+We've seen that `ValueTuple`s are not immutable. So, if we change the value of one of the data items in a `ValueTuple`, then what is the effect on the equality?
+
+[The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L210-L222)
+```csharp
+var myTuple1 = (10, "tien");
+var myTuple3 = myTuple1;
+
+Console.WriteLine($"myTuple1 equals myTuple3: {Object.Equals(myTuple1, myTuple3)}");
+Console.WriteLine($"myTuple1 equals myTuple3: {Object.ReferenceEquals(myTuple1, myTuple3)}");
+
+myTuple3.Item1 = 11;
+
+Console.WriteLine($"myTuple1 equals edited myTuple3: {Object.Equals(myTuple1, myTuple3)}");
+Console.WriteLine($"myTuple1 equals edited myTuple3: {Object.ReferenceEquals(myTuple1, myTuple3)}");
+```
+
+We get the following output:
+
+![Value Type identity and equality and immutability](valuetuple_identityandequality_immutability)
+
+Notice how:
+- if we change one of the data items equality no longer holds. Which was of course to be expected.
+
 ## Tuple Deconstruction
-C# 7.0 also has a syntax for deconstructing classes into there composing values. You can do this by providing a so called Deconstructor. Fortunately for us, the .NET framework provides Deconstructors out of the box for reference `Tuples` and for `ValueTuple`s. 
+C# 7.0 also has a syntax for deconstructing classes into there composing values. You can do this by providing a so called Deconstructor. Fortunately for us, the .NET framework provides Deconstructors out of the box for reference `Tuple`s and for `ValueTuple`s. 
 
 ### Basic introduction or Quick refresh
 Following is a simple refresh on Deconstruction. It is not my intention to provide a full explanation of how Deconstruction exactly works, but rather to give, for those unfamilliar with it, a basic intro so you can understand the examples discussed in the context of tuples, or for those needing a quick refresh, a quick refresh on the syntax and what makes it work.
@@ -913,7 +1000,7 @@ In the sample code you'll also find examples for nested `ValueTuple`s, mixed nam
 
 ### As Arguments to Methods
 
-#### Syntax for reference `Tuple`s
+#### Syntax for Reference tuples
 
 [The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithOrdinaryTuples.cs#L175-L182)
 ```csharp
@@ -926,7 +1013,7 @@ AcceptTheTuple(tuple);
 ```
 Nothing special here: a reference to the tuple is given to the method which can then use it internally.
 
-#### Syntax for ValueTuples
+#### Syntax for Value tuples
 
 [The code](https://github.com/sergedesmedt/CSharpLanguageFeatures/blob/master/ValueTuples/DoItWithValueTuples.cs#L296-L336)
 ```csharp
@@ -1325,8 +1412,10 @@ An interesting view on the why of ValueTuples being structs can be found in:
 A discussion on when to use ValueTuple and when to use Anonymous Types can be found in:
 [C# Conceptual: Tuples vs. ValueTuples vs. Anonymous Types vs. Struct vs Class](https://github.com/dotnet/docs/issues/1575)
 
-Ilspy .NET Decompiler:
-[ILSpy](https://github.com/icsharpcode/ILSpy)
-
 An article on why ValueTuples break the general properties of value types:
 [Tuple Trouble: Why C# Tuples Get to Break the Guidelines](https://msdn.microsoft.com/en-us/magazine/mt846725.aspx)
+
+Identity vs Equality: [# Comparing Values for Equality in .NET: Identity and Equivalence](https://www.codeproject.com/Articles/18714/Comparing-Values-for-Equality-in-NET-Identity-and)
+
+Ilspy .NET Decompiler:
+[ILSpy](https://github.com/icsharpcode/ILSpy)

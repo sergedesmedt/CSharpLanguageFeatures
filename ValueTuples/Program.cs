@@ -6,10 +6,10 @@ namespace ValueTuples
     {
         static void Main(string[] args)
         {
-            DoItWithOrdinaryTuples.IdentityandEquality();
-            DoItWithValueTuples.IdentityandEquality();
+            //DoItWithOrdinaryTuples.IdentityAndEquality();
+            DoItWithValueTuples.IdentityAndEquality_Immutability();
 
-            QuickRefresh_Deconstruction.DeconstructionOfObjectOfType_ClassWithDeconstructor();
+            //QuickRefresh_Deconstruction.DeconstructionOfObjectOfType_ClassWithDeconstructor();
         }
     }
 }
