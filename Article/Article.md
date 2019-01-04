@@ -563,7 +563,8 @@ Console.WriteLine($"IsImmutableBecauseOfValueTupleIsStruct" +
 	$" - temp: {temp2.Item1}");
 ```
 We get the following output:
-![Output of the code](valuetuple_insidelist.png)
+
+![ValueTuple inside List](valuetuple_insidelist.PNG)
 
 #### Under the hood
 So, how does this work under the hood? Let's see what this gets compiled to using C# 1.0 syntax:
@@ -632,7 +633,8 @@ Because of the pass-by-value / copy semantics of value types, when passing a `Va
 However, when passing the parameter by `ref` then we can change the value inside the method. That is the whole purpose of passing parameters by `ref`: to be able to change the value.
 
 So, if we execute the above code we get the following output in the console:
-![Output of the code](valuetuple_passbyref.png)
+
+![ValueTuple pass by reference](valuetuple_passbyref.PNG)
 
 Notice how:
  - for the argument passed by value (the first argument), after calling the action which changes the values passed to it, the original values in the calling method are left unchanged.
@@ -821,7 +823,8 @@ Console.WriteLine("The decomposition of the object results in following values >
                 $" targetForInt: {targetForInt}" +
                 $" targetForString: {targetForString}");
 ```
-![Output of the code](quickrefresh_deconstruction_deconstructionofobjectoftype_classwithdeconstructor.PNG)
+
+![Quick refresh of Deconstruction](quickrefresh_deconstruction_deconstructionofobjectoftype_classwithdeconstructor.PNG)
 
 Notice how:
  - The Deconstructor always has the name `Deconstructor`!
