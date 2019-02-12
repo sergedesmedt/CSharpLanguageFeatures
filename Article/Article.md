@@ -407,8 +407,6 @@ When usin the syntax convention for creation, the compiler knows how to deal wit
 
 #### Under the hood
 
-> Is onderstaande wel correct ? En moet er hier niet meer gedecompileerd staan?
-
 The above calls actually get compiled into following code (using C# 6.0 syntax)
 
 ```csharp
